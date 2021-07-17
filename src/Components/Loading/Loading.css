@@ -1,0 +1,205 @@
+.l{
+    animation:l 1s linear infinite;
+  }
+
+.o{
+  animation:o 1s linear infinite;
+}
+
+.a{
+  animation:a 1s linear infinite;
+}
+
+.d{
+  animation:d 1s linear infinite;
+}
+
+.i{
+  animation:i 1s linear infinite;
+}
+
+.n{
+  animation:n 1s linear infinite;
+}
+
+.g{
+  animation:g 1s linear infinite;
+}
+
+.loading{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation:color-shift 5s linear infinite;
+}
+
+
+  @keyframes l {
+    0% {
+      font-size: 20px;
+    }
+    10% {
+      font-size: 50px;
+    }
+    12% {
+      font-size: 45px;
+    }
+    22% {
+      font-size: 20px;
+    }
+  }
+
+  @keyframes o {
+    0% {
+      font-size: 20px;
+    }
+    10% {
+        font-size: 20px;
+    }
+    20% {
+      font-size: 50px;
+    }
+    22% {
+      font-size: 45px;
+    }
+    32% {
+      font-size: 20px;
+    }
+  }
+
+  @keyframes a {
+    0% {
+      font-size: 20px;
+    }
+    20% {
+        font-size: 20px;
+    }
+    30% {
+      font-size: 50px;
+    }
+    32% {
+      font-size: 45px;
+    }
+    42% {
+      font-size: 20px;
+    }
+  }
+
+  @keyframes d {
+    0% {
+      font-size: 20px;
+    }
+    30% {
+        font-size: 20px;
+    }
+    40% {
+      font-size: 50px;
+    }
+    42% {
+      font-size: 45px;
+    }
+    52% {
+      font-size: 20px;
+    }
+  }
+
+  @keyframes i {
+    0% {
+      font-size: 20px;
+    }
+    40% {
+        font-size: 20px;
+    }
+    50% {
+      font-size: 50px;
+    }
+    52% {
+      font-size: 45px;
+    }
+    62% {
+      font-size: 20px;
+    }
+  }
+
+  @keyframes n {
+    0% {
+      font-size: 20px;
+    }
+    50% {
+        font-size: 20px;
+    }
+    60% {
+      font-size: 50px;
+    }
+    62% {
+      font-size: 45px;
+    }
+    72% {
+      font-size: 20px;
+    }
+  }
+
+  @keyframes g {
+    0% {
+      font-size: 20px;
+    }
+    60% {
+        font-size: 20px;
+    }
+    70% {
+      font-size: 50px;
+    }
+    72% {
+      font-size: 45px;
+    }
+    82% {
+      font-size: 20px;
+    }
+  }
+
+
+  @keyframes color-shift {
+    0% {
+      color: rgb(0, 0, 0);
+    }
+    10% {
+        color: rgb(255, 0, 0);
+      }
+    20% {
+       color: rgb(100, 255, 0);
+    }
+    30% {
+        color: rgb(0, 255, 100);
+     }
+    40% {
+        color: rgb(0, 100, 255);
+    }
+    50% {
+        color: rgb(100, 0, 100);
+    }
+    60% {
+        color: rgb(100, 0, 100);
+    }
+    60% {
+        color: rgb(100, 100, 0);
+    }
+    60% {
+        color: rgb(100, 255, 100);
+    }
+    60% {
+        color: rgb(255, 255, 100);
+    }
+    70% {
+        color: rgb(255, 100, 255);
+    }
+    80% {
+        color: rgb(100, 100, 255);
+    }
+    80% {
+        color: rgb(100, 100, 100);
+    }
+    100% {
+        color: rgb(0, 0, 0);
+    }
+    
+  }

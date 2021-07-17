@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`My SearchPage should render the Search Page 1`] = `
+<div
+  className="search-form"
+>
+  <label
+    htmlFor="artist"
+  >
+    Artist:
+    <input
+      className="search-bar"
+      data-testid="artist"
+      id="artist"
+      onChange={[Function]}
+      type="text"
+    />
+  </label>
+  <label
+    htmlFor="song"
+  >
+    Song:
+    <input
+      className="search-bar"
+      data-testid="song"
+      id="song"
+      onChange={[Function]}
+      type="text"
+    />
+  </label>
+  <button
+    className="submit-button"
+    onClick={[Function]}
+    type="button"
+  >
+    Submit
+  </button>
+</div>
+`;

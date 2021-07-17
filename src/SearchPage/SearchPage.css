@@ -1,0 +1,19 @@
+.search-form{
+    display:flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    height:200px;
+}
+.search-bar{
+    width:200px;
+    height:30px;
+    margin:5px;
+}
+
+.submit-button{
+    background-color: aliceblue;
+    border: 1px solid #777;
+    border-radius: 10px;
+    width:80px;
+}

@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`My GraphPage non-shallow render 1`] = `
+<div
+  className="container-fluid"
+>
+  <div
+    className="row"
+  >
+    <div
+      className="col"
+    >
+      <div>
+        <canvas
+          data-testid="canvas"
+          height={150}
+          onClick={[Function]}
+          role="img"
+          width={300}
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    className="row"
+  >
+    <div
+      className="col"
+    >
+      <div
+        className={true}
+      >
+        content
+      </div>
+    </div>
+  </div>
+</div>
+`;

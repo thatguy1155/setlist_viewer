@@ -1,0 +1,60 @@
+{
+    "parser": "babel-eslint",
+    "env": {
+        "browser": true,
+        "es2021": true,
+        "jest/globals": true
+    },
+    "extends": [
+        "plugin:react/recommended",
+        "airbnb"
+    ],
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 12,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react",
+        "jest"
+    ],
+    "overrides": [
+        {
+          "files": [
+            "**/*.spec.js",
+            "**/*.spec.jsx"
+          ],
+          "env": {
+            "jest": true
+          }
+        }
+      ],
+    "rules": {
+        "no-unused-vars": "warn",
+        "react/prop-types": "warn",
+        "react/destructuring-assignment": "off",
+        "react/jsx-filename-extension":"off",
+        "no-shadow":"off",
+        "react/button-has-type":"warn",
+        "no-use-before-define":"warn",
+        "import/order":"warn",
+        "import/no-extraneous-dependencies":"warn",
+        "import/named":"warn",
+        "no-case-declarations":"warn",
+        "jsx-a11y/anchor-is-valid":"warn",
+        "jsx-a11y/click-events-have-key-events":"warn",
+        "jsx-a11y/no-noninteractive-element-interactions":"warn",
+        "import/extensions":"warn",
+        "import/prefer-default-export":"warn",
+        "react/react-in-jsx-scope":"warn",
+        "no-unused-expressions":"warn",
+        "max-len":"warn",
+        "jest/no-disabled-tests": "warn",
+        "jest/no-focused-tests": "error",
+        "jest/no-identical-title": "error",
+        "jest/prefer-to-have-length": "warn",
+        "jest/valid-expect": "error"
+    }
+}
