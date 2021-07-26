@@ -20,25 +20,6 @@ function AppContextProvider(props) {
   const [artist, setArtist] = useState('');
   const [error, setError] = useState(false);
 
-  const getYear = (date) => date.split('-')[2];
-
-  const songsPerYear = (dates) => {
-    const yearTally = {};
-    dates.forEach((date) => {
-      const year = getYear(date);
-      const yearInTally = Object.keys(yearTally).includes(year);
-      if (yearInTally) yearTally[year] += 1;
-      else yearTally[year] = 1;
-    });
-    return yearTally;
-  };
-
-  const parseByYear = ({ songDates, songName }) => {
-    const fixedSongName = songName.replace('%20', ' ');
-    const dates = songDates[fixedSongName];
-    setTally((array) => [...array, { [fixedSongName]: songsPerYear(dates) }]);
-  };
-
   const search = async (searchInfo) => {
     setIsLoading(true);
     setArtist(searchInfo.artist);
@@ -48,6 +29,24 @@ function AppContextProvider(props) {
     else setError(true);
     setIsLoading(false);
   };
+
+  const parseByYear = ({ songDates, songName }) => {
+    const fixedSongName = songName.replace('%20', ' ');
+    const dates = songDates[fixedSongName];
+    setTally((array) => [...array, { [fixedSongName]: songsPerYear(dates) }]);
+  };
+
+  const songsPerYear = (dates) => {
+    const yearTally = {};
+    dates.forEach((date) => {
+      const year = getYear(date);
+      if (yearTally[year]) yearTally[year] += 1;
+      else yearTally[year] = 1;
+    });
+    return yearTally;
+  };
+
+  const getYear = (date) => date.split('-')[2];
 
   const clearError = () => {
     setError(false);
