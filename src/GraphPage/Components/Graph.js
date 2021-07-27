@@ -3,9 +3,11 @@ import { Line } from 'react-chartjs-2';
 
 export default function Graph(props) {
   // TODO: if info is empty push to search page
-  const { tally } = props;
+  const { tally, years } = props;
   const title = tally.length > 0 && Object.keys(tally[0])[0];
-  const labels = tally.length > 0 && Object.keys(tally[0][title]);
+  console.log(years);
+  const labels = years && Object.values(years);
+  console.log(labels);
   // const data = tally.length > 0 && Object.values(tally[0][title]);
 
   const randomColor = () => {
@@ -17,8 +19,10 @@ export default function Graph(props) {
   const state = {
     labels,
     datasets: tally.map((song) => {
+      console.log(song);
       const title = Object.keys(song)[0];
       const data = Object.values(song[title]);
+      console.log(data);
       return {
         label: title,
         fill: false,

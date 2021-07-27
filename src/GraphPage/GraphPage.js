@@ -12,7 +12,7 @@ import { Link, useHistory } from 'react-router-dom';
 export default function GraphPage() {
   const history = useHistory();
   const {
-    artist, isLoading, tally, error, search,
+    artist, isLoading, tally, years, error, search,
   } = useContext(AppContext);
   const emptyPage = tally.length < 1 && !isLoading;
   const loadingPage = isLoading && tally.length < 1;
@@ -32,7 +32,7 @@ export default function GraphPage() {
     <Container fluid>
       <Row>
         <Col>
-          {loadingPage ? <Loading /> : <Graph tally={tally} />}
+          {loadingPage ? <Loading /> : <Graph tally={tally} years={years} />}
         </Col>
       </Row>
       <Row>
