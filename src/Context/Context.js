@@ -119,15 +119,16 @@ function AppContextProvider(props) {
     console.log(songName);
     console.log(years);
     if (!emptyYearObj) setTally((array) => [...array, { [songName]: yearsForSong(songDates) }]);
-    const newTally = tally;
-    const parsedNewTally = newTally.map((song) => {
-      const theSongName = Object.keys(song)[0];
-      const dates = song[theSongName];
-      const newDates = addEmptyYears(dates);
-      return { [theSongName]: newDates };
-    });
-    console.log(parsedNewTally);
-    setTally(parsedNewTally);
+    // TODO: debug the following code so that it updates all the items in the tally array
+    // const newTally = tally;
+    // const parsedNewTally = newTally.map((song) => {
+    //   const theSongName = Object.keys(song)[0];
+    //   const dates = song[theSongName];
+    //   const newDates = addEmptyYears(dates);
+    //   return { [theSongName]: newDates };
+    // });
+    // console.log(parsedNewTally);
+    // setTally(parsedNewTally);
     // setIsLoading(false);
   }, [years]);
 
