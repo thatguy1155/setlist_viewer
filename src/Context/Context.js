@@ -67,21 +67,21 @@ function AppContextProvider(props) {
     return completeYearTally;
   };
 
-  // TODO: this function isn't resetting the years after the first set of songs.
   const setRangeOfYears = (dates) => {
     const yearsForThisSong = getYearsForThisSong(dates).map((year) => parseInt(year, 10));
     const lastYearForThisSong = Math.max(...yearsForThisSong);
     const firstYearForThisSong = Math.min(...yearsForThisSong);
     const newYearRange = compareToYearsObj({ firstYearForThisSong, lastYearForThisSong });
+    console.log(newYearRange);
     if (newYearRange) setYears(newYearRange);
     // TODO: if years is updated, useEffect to re-render the other songs if len > 1
   };
 
   const compareToYearsObj = ({ firstYearForThisSong, lastYearForThisSong }) => {
     if (emptyYearObj) return newYearObject({ min: firstYearForThisSong, max: lastYearForThisSong });
-    const arrayOfYears = Object.keys(years);
-    const yearStateMin = Math.min(arrayOfYears);
-    const yearStateMax = Math.max(arrayOfYears);
+    const arrayOfYears = Object.keys(years).map((year) => parseInt(year, 10));
+    const yearStateMin = Math.min(...arrayOfYears);
+    const yearStateMax = Math.max(...arrayOfYears);
     const newMinYear = firstYearForThisSong < yearStateMin;
     const newMaxYear = lastYearForThisSong > yearStateMax;
 
@@ -119,12 +119,19 @@ function AppContextProvider(props) {
     console.log(songName);
     console.log(years);
     if (!emptyYearObj) setTally((array) => [...array, { [songName]: yearsForSong(songDates) }]);
-    setIsLoading(false);
+    const newTally = tally;
+    const parsedNewTally = newTally.map((song) => {
+      const theSongName = Object.keys(song)[0];
+      const dates = song[theSongName];
+      const newDates = addEmptyYears(dates);
+      return { [theSongName]: newDates };
+    });
+    console.log(parsedNewTally);
+    setTally(parsedNewTally);
+    // setIsLoading(false);
   }, [years]);
 
   useEffect(() => {
-    console.log(songName);
-    console.log(years);
     if (!emptyYearObj) setTally((array) => [...array, { [songName]: yearsForSong(songDates) }]);
     setIsLoading(false);
   }, [songDates]);
