@@ -110,18 +110,12 @@ function AppContextProvider(props) {
   const emptyYearObj = Object.keys(years).length === 0;
 
   useEffect(() => {
-    // const newSong = ({ [songName]: yearsForSong(songDates) });
-    // const newTally = tally;
-    // // newTally.push({ [songName]: yearsForSong(songDates) });
-    // // console.log(newTally);
-    // console.log(newSong);
     if (!emptyYearObj) setTally((array) => [...array, { [songName]: yearsForSong(songDates) }]);
     setIsLoading(false);
   }, [years]);
 
   useEffect(() => {
     if (tally.length > 0) {
-      console.log(tally);
       const newTally = tally;
       // new func
       const parsedNewTally = newTally.map((song) => {
