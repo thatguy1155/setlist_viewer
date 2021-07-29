@@ -53,6 +53,7 @@ function AppContextProvider(props) {
       else yearTallyForSong[year] = 1;
     });
     const completeTally = addEmptyYears(yearTallyForSong);
+    console.log(completeTally);
     return completeTally;
   };
 
@@ -72,9 +73,7 @@ function AppContextProvider(props) {
     const lastYearForThisSong = Math.max(...yearsForThisSong);
     const firstYearForThisSong = Math.min(...yearsForThisSong);
     const newYearRange = compareToYearsObj({ firstYearForThisSong, lastYearForThisSong });
-    console.log(newYearRange);
     if (newYearRange) setYears(newYearRange);
-    // TODO: if years is updated, useEffect to re-render the other songs if len > 1
   };
 
   const compareToYearsObj = ({ firstYearForThisSong, lastYearForThisSong }) => {
@@ -102,7 +101,6 @@ function AppContextProvider(props) {
     for (let year = min; year <= max; year += 1) {
       yearObj[year] = `${year}`;
     }
-    console.log(yearObj);
     return yearObj;
   };
 
@@ -111,31 +109,44 @@ function AppContextProvider(props) {
   const getYear = (date) => date.split('-')[2];
   const emptyYearObj = Object.keys(years).length === 0;
 
-  // TODO: works for one song, but sets year to empty when new song is added
-  // Make it so that every song is rerendered is the years change
-  // possibly create allsongs array
-  // separate useEffects for adding one song or rerendering all based on songname vs years updating
   useEffect(() => {
-    console.log(songName);
-    console.log(years);
-    if (!emptyYearObj) setTally((array) => [...array, { [songName]: yearsForSong(songDates) }]);
-    // TODO: debug the following code so that it updates all the items in the tally array
+    // const newSong = ({ [songName]: yearsForSong(songDates) });
     // const newTally = tally;
-    // const parsedNewTally = newTally.map((song) => {
-    //   const theSongName = Object.keys(song)[0];
-    //   const dates = song[theSongName];
-    //   const newDates = addEmptyYears(dates);
-    //   return { [theSongName]: newDates };
-    // });
-    // console.log(parsedNewTally);
-    // setTally(parsedNewTally);
-    // setIsLoading(false);
+    // // newTally.push({ [songName]: yearsForSong(songDates) });
+    // // console.log(newTally);
+    // console.log(newSong);
+    if (!emptyYearObj) setTally((array) => [...array, { [songName]: yearsForSong(songDates) }]);
+    setIsLoading(false);
   }, [years]);
 
   useEffect(() => {
-    if (!emptyYearObj) setTally((array) => [...array, { [songName]: yearsForSong(songDates) }]);
-    setIsLoading(false);
-  }, [songDates]);
+    if (tally.length > 0) {
+      console.log(tally);
+      const newTally = tally;
+      // new func
+      const parsedNewTally = newTally.map((song) => {
+        const theSongName = Object.keys(song)[0];
+        const dates = song[theSongName];
+        const newDates = addEmptyYears(dates);
+        return { [theSongName]: newDates };
+      });
+      // new func
+      const oldFirstSong = tally[0];
+      const oldFirstSongName = Object.keys(oldFirstSong)[0];
+      const oldFirstSongDates = oldFirstSong[oldFirstSongName];
+      const newFirstSong = parsedNewTally[0];
+      const newFirstSongName = Object.keys(newFirstSong)[0];
+      const newFirstSongDates = newFirstSong[newFirstSongName];
+      const datesUpdated = Object.keys(newFirstSongDates).length !== Object.keys(oldFirstSongDates).length;
+      if (datesUpdated) setTally(parsedNewTally);
+      setIsLoading(false);
+    }
+  }, [tally]);
+
+  // useEffect(() => {
+  //   if (!emptyYearObj) setTally((array) => [...array, { [songName]: yearsForSong(songDates) }]);
+  //   setIsLoading(false);
+  // }, [songDates]);
 
   const clearError = () => {
     setError(false);
