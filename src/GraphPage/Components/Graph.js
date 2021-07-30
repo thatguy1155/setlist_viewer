@@ -1,13 +1,16 @@
 import React, { useContext, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
+import { AppContext } from '../../Context/Context';
 
 export default function Graph(props) {
   // TODO: if info is empty push to search page
   const { tally, years } = props;
+  const {
+    shit,
+  } = useContext(AppContext);
   const title = tally.length > 0 && Object.keys(tally[0])[0];
   const labels = years && Object.values(years);
   // const data = tally.length > 0 && Object.values(tally[0][title]);
-
   const randomColor = () => {
     const red = Math.floor(Math.random() * 255);
     const green = Math.floor(Math.random() * 255);
@@ -30,17 +33,6 @@ export default function Graph(props) {
         data,
       };
     }),
-    // datasets: [
-    //   {
-    //     label: title,
-    //     fill: false,
-    //     lineTension: 0.5,
-    //     backgroundColor: 'rgba(75,192,192,1)',
-    //     borderColor: 'rgba(0,0,0,1)',
-    //     borderWidth: 2,
-    //     data,
-    //   },
-    // ],
   };
   useEffect(() => {
     // console.log(tally);
