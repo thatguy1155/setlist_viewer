@@ -12,11 +12,11 @@ import { Link, useHistory } from 'react-router-dom';
 export default function GraphPage() {
   const history = useHistory();
   const {
-    artist, isLoading, tally, years, error, search,
+    artist, isLoading, paddedSongs, years, error, search,
   } = useContext(AppContext);
-  const emptyPage = tally.length < 1 && !isLoading;
-  const loadingPage = isLoading && tally.length < 1;
-  const loadingAdditionalSong = isLoading && tally.length > 0;
+  const emptyPage = paddedSongs.length < 1 && !isLoading;
+  const loadingPage = isLoading && paddedSongs.length < 1;
+  const loadingAdditionalSong = isLoading && paddedSongs.length > 0;
 
   useEffect(() => {
     console.log(error);
@@ -32,7 +32,7 @@ export default function GraphPage() {
     <Container fluid>
       <Row>
         <Col>
-          {loadingPage ? <Loading /> : <Graph tally={tally} years={years} />}
+          {loadingPage ? <Loading /> : <Graph songs={paddedSongs} years={years} />}
         </Col>
       </Row>
       <Row>

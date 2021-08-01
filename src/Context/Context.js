@@ -1,6 +1,8 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { initialSearch } from '../Controllers/Controller';
-import { yearsUpdated } from './auxFunctions';
+import { range } from './auxFunctions';
+import { constructSongObject } from './songFunctions';
+import { getYearRange, addEmptyYears } from './yearFunctions';
 
 // predefined context
 export const AppContext = createContext(
@@ -8,172 +10,54 @@ export const AppContext = createContext(
     isLoading: false,
     error: false,
     years: {},
+    minYear: 0,
+    maxYear: 0,
     tally: [{}],
-    search: (searchInfo) => {},
+    search: () => {},
     clearError: () => {},
-    setParams: (arrayOfDates) => {},
+    setParams: () => {},
   },
 );
 
 // main context class that contains all data
 function AppContextProvider(props) {
-  const [isLoading, setIsLoading] = useState(false);
-  const [years, setYears] = useState({});
-  const [tally, setTally] = useState([]);
-  const shit = 'foobar';
-
-  /*
-
-  {white gloves: [
-    "12-13-2016":
-  ]}
-  [
-    {white gloves:
-                  {
-                    2016:4,
-                    2017:14,
-                    2019:23,
-                    2020:14
-                  }
-    },
-    {friday morning:
-                  {
-                    2019:23,
-                    2020:14
-                  }
-    },
-    ideal data structure:
-    {
-      name: friday morning,
-      byYear: {
-                2019:23,
-                2020:14
-              },
-      allYears: [2019,2020]
-    },
-  ]
-
-  {
-    2019:"2019",
-    2020:"2020"
-  }
-  */
-
-  const [artist, setArtist] = useState('');
   const [error, setError] = useState(false);
-
-  const [songDates, setSongDates] = useState([]);
-  const [songName, setSongName] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [artist, setArtist] = useState('');
+  const [songs, setSongs] = useState([]);
+  const [paddedSongs, setPaddedSongs] = useState([]);
+  const [minYear, setMinYear] = useState(0);
+  const [maxYear, setMaxYear] = useState(0);
+  const [years, setYears] = useState([]);
 
   const search = async (searchInfo) => {
     setIsLoading(true);
     setArtist(searchInfo.artist);
     const songData = await initialSearch(searchInfo);
-    const searchSuccess = Object.keys(songDates)[0] !== '__error__';
-    if (searchSuccess) setParams({ songData, nameForThisSong: searchInfo.song });
-    else {
+    const searchSuccess = Object.keys(songData)[0] !== '__error__';
+    if (searchSuccess) {
+      const song = constructSongObject(songData);
+      setParams(song);
+    } else {
       setError(true);
       setIsLoading(false);
     }
   };
 
-  const setParams = ({ songData, nameForThisSong }) => {
-    const thisSongName = nameForThisSong.replace('%20', ' ');
-    const datesForSong = songData[thisSongName];
-    setSongName(thisSongName);
-    setSongDates(datesForSong);
-    setRangeOfYears(datesForSong);
+  const setParams = (song) => {
+    const newYearRange = getYearRange({ minYear, maxYear, newSongYears: song.allYears });
+    setMinYear(newYearRange.min);
+    setMaxYear(newYearRange.max);
+    setYears(range(newYearRange.min, newYearRange.max, 1));
+    setSongs((array) => [...array, song]);
   };
-
-  const yearsForSong = (dates) => {
-    const yearTallyForSong = {};
-    dates.forEach((date) => {
-      const year = getYear(date);
-      if (yearTallyForSong[year]) yearTallyForSong[year] += 1;
-      else yearTallyForSong[year] = 1;
-    });
-    const completeTally = addEmptyYears(yearTallyForSong);
-    console.log(completeTally);
-    return completeTally;
-  };
-
-  const addEmptyYears = (yearTallyForSong) => {
-    const listOfYears = Object.keys(years);
-    const completeYearTally = {};
-    listOfYears.forEach((yearInObj) => {
-      // possible error here due to typing
-      if (yearTallyForSong[yearInObj]) completeYearTally[yearInObj] = yearTallyForSong[yearInObj];
-      else completeYearTally[yearInObj] = 0;
-    });
-    return completeYearTally;
-  };
-
-  const setRangeOfYears = (dates) => {
-    const yearsForThisSong = getYearsForThisSong(dates).map((year) => parseInt(year, 10));
-    const lastYearForThisSong = Math.max(...yearsForThisSong);
-    const firstYearForThisSong = Math.min(...yearsForThisSong);
-    const newYearRange = compareToYearsObj({ firstYearForThisSong, lastYearForThisSong });
-    if (newYearRange) setYears(newYearRange);
-  };
-
-  const compareToYearsObj = ({ firstYearForThisSong, lastYearForThisSong }) => {
-    if (emptyYearObj) return newYearObject({ min: firstYearForThisSong, max: lastYearForThisSong });
-    const arrayOfYears = Object.keys(years).map((year) => parseInt(year, 10));
-    const yearStateMin = Math.min(...arrayOfYears);
-    const yearStateMax = Math.max(...arrayOfYears);
-    const newMinYear = firstYearForThisSong < yearStateMin;
-    const newMaxYear = lastYearForThisSong > yearStateMax;
-
-    if (newMinYear && newMaxYear) {
-      return newYearObject({ min: firstYearForThisSong, max: lastYearForThisSong });
-    }
-    if (newMinYear) {
-      return newYearObject({ min: firstYearForThisSong, max: yearStateMax });
-    }
-    if (newMaxYear) {
-      return newYearObject({ min: yearStateMin, max: lastYearForThisSong });
-    }
-    return null;
-  };
-
-  const newYearObject = ({ min, max }) => {
-    const yearObj = {};
-    for (let year = min; year <= max; year += 1) {
-      yearObj[year] = `${year}`;
-    }
-    return yearObj;
-  };
-
-  const getYearsForThisSong = (dates) => dates.map((date) => getYear(date));
-
-  const getYear = (date) => date.split('-')[2];
-  const emptyYearObj = Object.keys(years).length === 0;
 
   useEffect(() => {
-    if (!emptyYearObj) setTally((array) => [...array, { [songName]: yearsForSong(songDates) }]);
-    setIsLoading(false);
-  }, [years]);
-
-  useEffect(() => {
-    if (!emptyYearObj) setTally((array) => [...array, { [songName]: yearsForSong(songDates) }]);
-    setIsLoading(false);
-  }, [songDates]);
-
-  useEffect(() => {
-    if (tally.length > 0) {
-      const newTally = tally;
-      // new func
-      const parsedNewTally = newTally.map((song) => {
-        const theSongName = Object.keys(song)[0];
-        const dates = song[theSongName];
-        const newDates = addEmptyYears(dates);
-        return { [theSongName]: newDates };
-      });
-      const datesUpdated = yearsUpdated({ oldYearObject: tally, newYearObject: parsedNewTally });
-      if (datesUpdated) setTally(parsedNewTally);
+    if (songs) {
+      setPaddedSongs(songs.map((song) => addEmptyYears({ years, song })));
       setIsLoading(false);
     }
-  }, [tally]);
+  }, [songs]);
 
   const clearError = () => {
     setError(false);
@@ -181,14 +65,13 @@ function AppContextProvider(props) {
 
   return (
     <AppContext.Provider value={{
-      tally,
-      years,
       search,
       isLoading,
       error,
       clearError,
       artist,
-      shit,
+      paddedSongs,
+      years,
     }}
     >
       {props.children}
