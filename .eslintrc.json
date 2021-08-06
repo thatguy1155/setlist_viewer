@@ -38,7 +38,7 @@
         "react/jsx-filename-extension":"off",
         "no-shadow":"off",
         "react/button-has-type":"warn",
-        "no-use-before-define":"warn",
+        "no-use-before-define":"off",
         "import/order":"warn",
         "import/no-extraneous-dependencies":"warn",
         "import/named":"warn",

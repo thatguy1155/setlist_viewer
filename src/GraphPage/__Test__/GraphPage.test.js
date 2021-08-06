@@ -21,18 +21,18 @@ describe('My GraphPage', () => {
     expect(element.toJSON()).toMatchSnapshot();
   });
 
-  it('should return string ready for the API', () => {
-    const form = render(<ExtraSong value="" search={callback} />);
-    fireEvent.change(form.getByTestId('song'), {
-      target: { value: 'truckin' },
-    });
-    act(() => {
-      userEvent.click(screen.getByRole('button'));
-    });
+  // it('should return string ready for the API', () => {
+  //   const form = render(<ExtraSong value="" search={callback} />);
+  //   fireEvent.change(form.getByTestId('song'), {
+  //     target: { value: 'truckin' },
+  //   });
+  //   act(() => {
+  //     userEvent.click(screen.getByRole('button'));
+  //   });
 
-    expect(callback).toHaveBeenCalledTimes(1);
-    expect(callback).toHaveBeenCalledWith({ song: 'truckin' });
-  });
+  //   expect(callback).toHaveBeenCalledTimes(1);
+  //   expect(callback).toHaveBeenCalledWith({ song: 'truckin' });
+  // });
 
   //   it('should show an altered name', () => {
   //     //await screen.findByText(/Signed in as/);

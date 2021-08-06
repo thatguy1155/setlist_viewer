@@ -1,53 +1,63 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import { initialSearch } from '../Controllers/Controller';
+import { range } from './auxFunctions';
+import { constructSongObject } from './songFunctions';
+import { getYearRange, addEmptyYears } from './yearFunctions';
 
 // predefined context
 export const AppContext = createContext(
   {
     isLoading: false,
     error: false,
-    search: (searchInfo) => {},
-    tally: (searchInfo) => [{}],
+    years: {},
+    minYear: 0,
+    maxYear: 0,
+    tally: [{}],
+    search: () => {},
     clearError: () => {},
-    parseByYear: (arrayOfDates) => {},
+    setParams: () => {},
   },
 );
 
 // main context class that contains all data
 function AppContextProvider(props) {
-  const [isLoading, setIsLoading] = useState(false);
-  const [tally, setTally] = useState([]);
-  const [artist, setArtist] = useState('');
   const [error, setError] = useState(false);
-
-  const getYear = (date) => date.split('-')[2];
-
-  const songsPerYear = (dates) => {
-    const yearTally = {};
-    dates.forEach((date) => {
-      const year = getYear(date);
-      const yearInTally = Object.keys(yearTally).includes(year);
-      if (yearInTally) yearTally[year] += 1;
-      else yearTally[year] = 1;
-    });
-    return yearTally;
-  };
-
-  const parseByYear = ({ songDates, songName }) => {
-    const fixedSongName = songName.replace('%20', ' ');
-    const dates = songDates[fixedSongName];
-    setTally((array) => [...array, { [fixedSongName]: songsPerYear(dates) }]);
-  };
+  const [isLoading, setIsLoading] = useState(false);
+  const [artist, setArtist] = useState('');
+  const [songs, setSongs] = useState([]);
+  const [paddedSongs, setPaddedSongs] = useState([]);
+  const [minYear, setMinYear] = useState(0);
+  const [maxYear, setMaxYear] = useState(0);
+  const [years, setYears] = useState([]);
 
   const search = async (searchInfo) => {
     setIsLoading(true);
     setArtist(searchInfo.artist);
-    const songDates = await initialSearch(searchInfo);
-    const searchSuccess = Object.keys(songDates)[0] !== '__error__';
-    if (searchSuccess) parseByYear({ songDates, songName: searchInfo.song });
-    else setError(true);
-    setIsLoading(false);
+    const songData = await initialSearch(searchInfo);
+    const searchSuccess = Object.keys(songData)[0] !== '__error__';
+    if (searchSuccess) {
+      const song = constructSongObject(songData);
+      setParams(song);
+    } else {
+      setError(true);
+      setIsLoading(false);
+    }
   };
+
+  const setParams = (song) => {
+    const newYearRange = getYearRange({ minYear, maxYear, newSongYears: song.allYears });
+    setMinYear(newYearRange.min);
+    setMaxYear(newYearRange.max);
+    setYears(range(newYearRange.min, newYearRange.max, 1));
+    setSongs((array) => [...array, song]);
+  };
+
+  useEffect(() => {
+    if (songs) {
+      setPaddedSongs(songs.map((song) => addEmptyYears({ years, song })));
+      setIsLoading(false);
+    }
+  }, [songs]);
 
   const clearError = () => {
     setError(false);
@@ -55,12 +65,13 @@ function AppContextProvider(props) {
 
   return (
     <AppContext.Provider value={{
-      tally,
       search,
       isLoading,
       error,
       clearError,
       artist,
+      paddedSongs,
+      years,
     }}
     >
       {props.children}
