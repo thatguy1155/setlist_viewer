@@ -1,6 +1,7 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, {
+  createContext, useState, useMemo,
+} from 'react';
 import { initialSearch } from '../Controllers/Controller';
-import { range } from './auxFunctions';
 import { constructSongObject } from './songFunctions';
 import { getYearRange, addEmptyYears } from './yearFunctions';
 
@@ -9,10 +10,7 @@ export const AppContext = createContext(
   {
     isLoading: false,
     error: false,
-    years: {},
-    minYear: 0,
-    maxYear: 0,
-    tally: [{}],
+    years: [],
     search: () => {},
     clearError: () => {},
     setParams: () => {},
@@ -25,9 +23,6 @@ function AppContextProvider(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [artist, setArtist] = useState('');
   const [songs, setSongs] = useState([]);
-  const [paddedSongs, setPaddedSongs] = useState([]);
-  const [minYear, setMinYear] = useState(0);
-  const [maxYear, setMaxYear] = useState(0);
   const [years, setYears] = useState([]);
 
   const search = async (searchInfo) => {
@@ -45,24 +40,17 @@ function AppContextProvider(props) {
   };
 
   const setParams = (song) => {
-    const newYearRange = getYearRange({ minYear, maxYear, newSongYears: song.allYears });
-    setMinYear(newYearRange.min);
-    setMaxYear(newYearRange.max);
-    setYears(range(newYearRange.min, newYearRange.max, 1));
-    setSongs((array) => [...array, song]);
+    const newSongs = [...songs, song];
+    const newYears = getYearRange(newSongs);
+    setYears(newYears);
+    setSongs(newSongs);
   };
-
-  useEffect(() => {
-    if (songs) {
-      setPaddedSongs(songs.map((song) => addEmptyYears({ years, song })));
-      setIsLoading(false);
-    }
-  }, [songs]);
 
   const clearError = () => {
     setError(false);
   };
-
+  const paddedSongs = songs.map((song) => addEmptyYears({ years, song }));
+  const memoizedPaddedSongs = useMemo(() => paddedSongs, [songs]);
   return (
     <AppContext.Provider value={{
       search,
@@ -70,7 +58,7 @@ function AppContextProvider(props) {
       error,
       clearError,
       artist,
-      paddedSongs,
+      memoizedPaddedSongs,
       years,
     }}
     >

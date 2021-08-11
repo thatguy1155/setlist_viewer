@@ -20,14 +20,15 @@ describe('constructSongObject', () => {
 
 describe('getYearRange', () => {
   it('changes the min or max years based on the new song data', () => {
-    const minYear = 2016;
-    const maxYear = 2020;
-    const newSongYears = [2015, 2016, 2017, 2018];
-    const output = {
-      min: 2015,
-      max: 2020,
-    };
-    expect(getYearRange({ minYear, maxYear, newSongYears })).toEqual(output);
+    const songs = [
+      {
+        allYears: [2019, 2020],
+      },
+      {
+        allYears: [2021, 2022],
+      },
+    ];
+    expect(getYearRange(songs)).toEqual([2019, 2020, 2021, 2022]);
   });
 });
 
