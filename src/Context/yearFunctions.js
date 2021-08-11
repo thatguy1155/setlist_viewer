@@ -1,9 +1,11 @@
-export const getYearRange = ({ minYear, maxYear, newSongYears }) => {
-  const lastYearForThisSong = Math.max(...newSongYears);
-  const firstYearForThisSong = Math.min(...newSongYears);
-  const min = minYear === 0 || firstYearForThisSong < minYear ? firstYearForThisSong : minYear;
-  const max = lastYearForThisSong > maxYear ? lastYearForThisSong : maxYear;
-  return { min, max };
+import { range } from './auxFunctions';
+
+export const getYearRange = (songs) => {
+  const allYears = songs.flatMap((song) => song.allYears);
+  const lastYear = Math.max(...allYears);
+  const firstYear = Math.min(...allYears);
+  const years = range(firstYear, lastYear, 1);
+  return years;
 };
 
 export const addEmptyYears = ({ years, song }) => {
