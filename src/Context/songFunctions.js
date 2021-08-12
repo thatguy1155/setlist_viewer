@@ -1,4 +1,4 @@
-import { getYear } from './auxFunctions';
+import { getYear, randomColor } from './auxFunctions';
 
 // eslint-disable-next-line import/prefer-default-export
 export const constructSongObject = (searchResult) => {
@@ -8,6 +8,7 @@ export const constructSongObject = (searchResult) => {
   const rawDates = searchResult[song.name];
   song.byYear = yearsForSong(rawDates);
   song.allYears = yearsAsInt(Object.keys(song.byYear));
+  song.color = randomColor();
   return song;
 };
 

@@ -2,3 +2,12 @@
     height:100px;
     width:100px;
 }
+.song-title-wrapper{
+  display:flex;
+  justify-content: space-between;
+  padding:10px;
+}
+
+.song-title-text{
+  color:white;
+}

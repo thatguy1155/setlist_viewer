@@ -6,6 +6,7 @@ import { AppContext } from '../Context/Context';
 import Graph from './Components/Graph';
 import Loading from '../Components/Loading/Loading';
 import ExtraSong from './Components/ExtraSong';
+import SongTitles from './Components/SongTitles';
 import './GraphPage.css';
 import { Link, useHistory } from 'react-router-dom';
 
@@ -19,17 +20,20 @@ export default function GraphPage() {
   const loadingAdditionalSong = isLoading && memoizedPaddedSongs.length > 0;
 
   useEffect(() => {
-    console.log(error);
     if (emptyPage && !error) history.push('/');
     // eslint-disable-line
   }, []);
   useEffect(() => {
     if (error) history.push('/error');
-    // eslint-disable-line
   }, [error]);
 
   return (
     <Container fluid>
+      <Row>
+        <Col>
+          {memoizedPaddedSongs.map((song) => <SongTitles title={song.name} color={song.color} />)}
+        </Col>
+      </Row>
       <Row>
         <Col>
           {loadingPage ? <Loading /> : <Graph songs={memoizedPaddedSongs} years={years} />}

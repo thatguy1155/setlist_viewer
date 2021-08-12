@@ -9,6 +9,13 @@ exports[`My GraphPage non-shallow render 1`] = `
   >
     <div
       className="col"
+    />
+  </div>
+  <div
+    className="row"
+  >
+    <div
+      className="col"
     >
       <div>
         <canvas
