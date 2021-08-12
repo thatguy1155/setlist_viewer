@@ -3,6 +3,7 @@ import {
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import GraphPage from '../GraphPage';
+import SongTitles from '../Components/SongTitles';
 import ExtraSong from '../Components/ExtraSong';
 import AppContextProvider from '../../Context/Context';
 import TestRenderer from 'react-test-renderer';
@@ -19,6 +20,12 @@ describe('My GraphPage', () => {
       </AppContextProvider>,
     );
     expect(element.toJSON()).toMatchSnapshot();
+  });
+
+  test('should display song titles', () => {
+    render(<SongTitles title="Power" />);
+    const input = screen.getByText('Power');
+    expect(input).toBeInTheDocument();
   });
 
   // it('should return string ready for the API', () => {
