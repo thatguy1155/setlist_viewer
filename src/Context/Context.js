@@ -1,7 +1,7 @@
 import React, {
   createContext, useState, useMemo,
 } from 'react';
-import { initialSearch } from '../Controllers/Controller';
+import { initialSearch, suggestSearch } from '../Controllers/Controller';
 import { constructSongObject } from './songFunctions';
 import { getYearRange, addEmptyYears } from './yearFunctions';
 
@@ -12,6 +12,7 @@ export const AppContext = createContext(
     error: false,
     years: [],
     search: () => {},
+    suggest: () => {},
     clearError: () => {},
     setParams: () => {},
   },
@@ -24,6 +25,16 @@ function AppContextProvider(props) {
   const [artist, setArtist] = useState('');
   const [songs, setSongs] = useState([]);
   const [years, setYears] = useState([]);
+
+  const suggest = async (searchInfo) => {
+    const songData = await suggestSearch(searchInfo);
+    const searchSuccess = Object.keys(songData)[0] !== '__error__';
+    if (searchSuccess) {
+      console.log(songData);
+    } else {
+      setError(true);
+    }
+  };
 
   const search = async (searchInfo) => {
     setIsLoading(true);
@@ -54,6 +65,7 @@ function AppContextProvider(props) {
   return (
     <AppContext.Provider value={{
       search,
+      suggest,
       isLoading,
       error,
       clearError,

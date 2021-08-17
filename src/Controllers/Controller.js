@@ -1,4 +1,4 @@
-import { initialSearchAPI } from '../ApiCalls/Api_Calls';
+import { initialSearchAPI, suggestSearchAPI } from '../ApiCalls/Api_Calls';
 
 export const initialSearch = async (searchParams) => {
   const rawResult = await initialSearchAPI(searchParams);
@@ -6,6 +6,7 @@ export const initialSearch = async (searchParams) => {
   return rawResult;
 };
 
-const parseArtistSearch = () => {
-
+export const suggestSearch = async (searchParams) => {
+  const result = await suggestSearchAPI(searchParams);
+  return result;
 };

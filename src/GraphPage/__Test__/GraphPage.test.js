@@ -21,18 +21,27 @@ describe('My GraphPage', () => {
     expect(element.toJSON()).toMatchSnapshot();
   });
 
-  // it('should return string ready for the API', () => {
-  //   const form = render(<ExtraSong value="" search={callback} />);
-  //   fireEvent.change(form.getByTestId('song'), {
-  //     target: { value: 'truckin' },
-  //   });
-  //   act(() => {
-  //     userEvent.click(screen.getByRole('button'));
-  //   });
+  it('lets you enter an additional song to search', () => {
+    const form = render(<ExtraSong value="" artist="grateful dead" submit={callback} />);
+    fireEvent.change(form.getByTestId('song'), {
+      target: { value: 'truckin' },
+    });
+    act(() => {
+      userEvent.click(screen.getByRole('button'));
+    });
 
-  //   expect(callback).toHaveBeenCalledTimes(1);
-  //   expect(callback).toHaveBeenCalledWith({ song: 'truckin' });
-  // });
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledWith({ artist: 'grateful%20dead', song: 'truckin' });
+  });
+
+  it('searches for values while you enter a word', () => {
+    const form = render(<ExtraSong value="" artist="grateful dead" suggest={callback} />);
+    fireEvent.change(form.getByTestId('song'), {
+      target: { value: 'truckin' },
+    });
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledWith({ artist: 'grateful%20dead', song: 'truckin' });
+  });
 
   //   it('should show an altered name', () => {
   //     //await screen.findByText(/Signed in as/);
