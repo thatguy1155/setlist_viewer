@@ -12,7 +12,7 @@ import { Link, useHistory } from 'react-router-dom';
 export default function GraphPage() {
   const history = useHistory();
   const {
-    artist, isLoading, memoizedPaddedSongs, years, error, search,
+    artist, isLoading, memoizedPaddedSongs, years, error, search, suggest,
   } = useContext(AppContext);
   const emptyPage = memoizedPaddedSongs.length < 1 && !isLoading;
   const loadingPage = isLoading && memoizedPaddedSongs.length < 1;
@@ -37,7 +37,7 @@ export default function GraphPage() {
       </Row>
       <Row>
         <Col>
-          {!loadingPage && <ExtraSong artist={artist} submit={search} />}
+          {!loadingPage && <ExtraSong artist={artist} submit={search} suggest={suggest} />}
         </Col>
       </Row>
     </Container>
